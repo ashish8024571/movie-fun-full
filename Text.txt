@@ -1,0 +1,20 @@
+/home/rbs/dev
+
+rm -rf /home/rbs/dev/tomee/webapps/*
+rm -rf /home/rbs/dev/tomee/data/*
+
+cp target/moviefun.war /home/rbs/dev/tomee/webapps
+
+/home/rbs/dev/tomee/bin/catalina.sh run
+
+cf push moviefun -p target/moviefun.war -b https://github.com/cloudfoundry-community/tomee-buildpack/releases/download/v4.16.1/tomee-buildpack-v4.16.1.zip --random-route
+
+cd ~/workspace/assignment-submission
+./gradlew replatformingBuildpacks -PmovieFunUrl=https://moviefun-exhausted-chimpanzee.apps.evans.pal.pivotal.io
+
+We no longer need the web.xml and persistence.xml files. Feel free to delete them.
+
+cf push moviefun -p target/moviefun.war -b java_buildpack_offline --random-route
+
+cd ~/workspace/assignment-submission
+./gradlew replatformingSpringBootification -PmovieFunUrl=https://moviefun-nice-gelada.apps.evans.pal.pivotal.io

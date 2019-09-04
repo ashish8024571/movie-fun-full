@@ -1,0 +1,15 @@
+applications:
+  - name: moviefun
+    path: ./target/moviefun.war
+    routes:
+      - route: moviefun.apps.evans.pal.pivotal.io
+    memory: 1G
+    instances: 1
+    env:
+      #REGISTRATION_SERVER_ENDPOINT: http://vipula-pivotal.apps.evans.pal.pivotal.io
+      #JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS: 'always'
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      #GRANT_TYPE: client_credentials
+    services:
+      - movies-mysql
