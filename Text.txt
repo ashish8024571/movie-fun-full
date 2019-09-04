@@ -17,4 +17,6 @@ We no longer need the web.xml and persistence.xml files. Feel free to delete the
 cf push moviefun -p target/moviefun.war -b java_buildpack_offline --random-route
 
 cd ~/workspace/assignment-submission
-./gradlew replatformingSpringBootification -PmovieFunUrl=https://moviefun-nice-gelada.apps.evans.pal.pivotal.io
+./gradlew replatformingSpringBootification -PmovieFunUrl=https://moviefun-nice-gelada.apps.evans.pal.pivotal.io/
+
+Added manifest file
