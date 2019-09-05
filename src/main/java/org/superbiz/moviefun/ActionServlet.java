@@ -19,6 +19,10 @@ package org.superbiz.moviefun;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.superbiz.moviefun.movies.Movie;
 import org.superbiz.moviefun.movies.MoviesBean;
 
@@ -36,8 +40,14 @@ import java.util.List;
 public class ActionServlet extends HttpServlet {
 
     private static final long serialVersionUID = -5832176047021911038L;
+    //private TransactionTemplate transactionTemplate;
+    private final PlatformTransactionManager moviesPlatformTransactionManager;
 
     public static int PAGE_SIZE = 5;
+
+    public ActionServlet(PlatformTransactionManager moviesPlatformTransactionManager) {
+        this.moviesPlatformTransactionManager = moviesPlatformTransactionManager;
+    }
 
     @Autowired
     private MoviesBean moviesBean;
@@ -55,6 +65,7 @@ public class ActionServlet extends HttpServlet {
     private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+
         if ("Add".equals(action)) {
 
             String title = request.getParameter("title");
@@ -65,7 +76,17 @@ public class ActionServlet extends HttpServlet {
 
             Movie movie = new Movie(title, director, genre, rating, year);
 
-            moviesBean.addMovie(movie);
+            TransactionTemplate transactionMovieTemplate = new TransactionTemplate(moviesPlatformTransactionManager);
+            transactionMovieTemplate.execute(new TransactionCallback() {
+                @Override
+                public Object doInTransaction(TransactionStatus transactionStatus) {
+                    moviesBean.addMovie(movie);
+                    return null;
+                }
+            });
+
+
+            //moviesBean.addMovie(movie);
             response.sendRedirect("moviefun");
             return;
 
