@@ -1,2 +1,6 @@
 
-    cf cups photo-storage -p '{"access_key_id": "AKIAVT7FZ27LSJW7JTFW", "bucket": "arnav.jain.rbs.co.uk", "secret_access_key": "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"}'
+    cf cups photo-storage -p '{"access_key_id": "AKIAVT7FZ27LSJW7JTFW", "bucket": "arnav.jain.rbs.co.uk", "secret_access_key": "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",}'
+
+    export VCAP_SERVICES='{"user-provided": [{"credentials": {"access_key_id": "SQYLN4A9CPKBM62ESOUO", "bucket": "moviefun", "secret_access_key": "speeNsVigz2lZsw6ayCeqaxlkXK3MWTsz0zCvN4I", "endpoint": "http://192.168.10.133:9000"}, "name": "photo-storage"}]}'
+
+    for logging - logging level in yml should be at the top level
