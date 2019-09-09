@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.superbiz.moviefun.blobstore.Blob;
+import org.superbiz.moviefun.blobstore.S3Store;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,9 +27,11 @@ import static java.nio.file.Files.readAllBytes;
 public class AlbumsController {
 
     private final AlbumsBean albumsBean;
+    private final S3Store s3Store;
 
-    public AlbumsController(AlbumsBean albumsBean) {
+    public AlbumsController(AlbumsBean albumsBean, S3Store s3Store) {
         this.albumsBean = albumsBean;
+        this.s3Store = s3Store;
     }
 
 
@@ -45,8 +49,9 @@ public class AlbumsController {
 
     @PostMapping("/{albumId}/cover")
     public String uploadCover(@PathVariable long albumId, @RequestParam("file") MultipartFile uploadedFile) throws IOException {
+        Blob blob = new Blob(uploadedFile.getName(),uploadedFile.getInputStream(),uploadedFile.getContentType());
+        s3Store.put(blob);
         saveUploadToFile(uploadedFile, getCoverFile(albumId));
-
         return format("redirect:/albums/%d", albumId);
     }
 
@@ -54,6 +59,7 @@ public class AlbumsController {
     public HttpEntity<byte[]> getCover(@PathVariable long albumId) throws IOException, URISyntaxException {
         Path coverFilePath = getExistingCoverPath(albumId);
         byte[] imageBytes = readAllBytes(coverFilePath);
+        //s3Store.get();
         HttpHeaders headers = createImageHttpHeaders(coverFilePath, imageBytes);
 
         return new HttpEntity<>(imageBytes, headers);
@@ -64,7 +70,6 @@ public class AlbumsController {
         targetFile.delete();
         targetFile.getParentFile().mkdirs();
         targetFile.createNewFile();
-
         try (FileOutputStream outputStream = new FileOutputStream(targetFile)) {
             outputStream.write(uploadedFile.getBytes());
         }
