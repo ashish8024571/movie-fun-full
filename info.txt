@@ -1,0 +1,2 @@
+
+    cf cups photo-storage -p '{"access_key_id": "AKIAVT7FZ27LSJW7JTFW", "bucket": "arnav.jain.rbs.co.uk", "secret_access_key": "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"}'
