@@ -1,0 +1,3 @@
+cf mysql movies-mysql < /home/rbs/workspace/movie-fun/src/main/java/org/superbiz/moviefun/database/script.ddl
+
+./gradlew replatformingBackgroundJobsWithDb -PmovieFunUrl=https://moviefun-nice-gelada.apps.evans.pal.pivotal.io/

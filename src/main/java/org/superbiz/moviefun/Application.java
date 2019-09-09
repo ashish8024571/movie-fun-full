@@ -3,6 +3,9 @@ package org.superbiz.moviefun;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
 import org.superbiz.moviefun.blobstore.ServiceCredentials;
+
+import javax.sql.DataSource;
 
 @SpringBootApplication
 public class Application {
@@ -28,7 +33,17 @@ public class Application {
     ServiceCredentials serviceCredentials(@Value("${vcap.services}") String vcapServices) {
         return new ServiceCredentials(vcapServices);
     }
-
+/*    @Bean
+    public DataSource albumsDataSource(ServiceCredentials serviceCredentials) {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setURL(serviceCredentials.jdbcUrl("albums-mysql"));
+        HikariConfig hikariConfig = new HikariConfig();
+        //hikariConfig.setJdbcUrl( "jdbc_url" );
+        hikariConfig.setDataSource(dataSource);
+        HikariDataSource ds = new HikariDataSource(hikariConfig);
+        return ds;
+        //return hikariConfig;
+    }*/
     @Bean
     public BlobStore blobStore(
         ServiceCredentials serviceCredentials,
