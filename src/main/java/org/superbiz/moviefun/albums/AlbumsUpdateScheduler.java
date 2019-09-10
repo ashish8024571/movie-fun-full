@@ -1,3 +1,4 @@
+/*
 package org.superbiz.moviefun.albums;
 
 import org.slf4j.Logger;
@@ -58,3 +59,4 @@ public class AlbumsUpdateScheduler {
         return updatedRows > 0;
     }
 }
+*/
